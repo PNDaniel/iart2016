@@ -9,7 +9,8 @@ public class Node {
     private String id; // Identification of Node object
     private int pos_x; // X coordinate of Node object
     private int pos_y; // Y coordinate of Node object
-    private double cost; // Path cost for Node object
+    private double g; // G cost for Node object
+    public double f;
 
     // Constructor method for class Node
     public Node(String id, int pos_x, int pos_y) {
@@ -26,8 +27,7 @@ public class Node {
 
     public int getPos_y() { return this.pos_y; }
 
-    public double getCost() { return this.cost; }
-
+    public double getG() { return this.g; }
     // SET METHODS
 
 
@@ -37,12 +37,12 @@ public class Node {
 
     public void setPos_y(int pos_y) { this.pos_y = pos_y; }
 
-    public void setCost(double cost) { this.cost = cost; }
+    public void setG(double g) { this.g = g; }
 
     // OTHER METHODS
 
-    // Calculates the distance between to Nodes with coordinates (X1, Y1) and (X2, Y2)
-    public double getDistance(Node n2) {
+    // Calculates the euclidean distance between to Nodes with coordinates (X1, Y1) and (X2, Y2)
+    public double getEuclideanDistance(Node n2) {
         double n1_pos_x = this.getPos_x();
         double n1_pos_y = this.getPos_y();
 

@@ -32,12 +32,12 @@ public class Graph {
 
     // OTHER METHODS
 
-    //Get number of Node objects in array list nodes
+    // Get number of Node objects in array list nodes
     public int getNumNodes() {
         return this.nodes.size();
     }
 
-    //Returns an array list of Node objects where Node object is the source of the Edge objects
+    // Returns an array list of Node objects where Node object is the source of the Edge objects
     public ArrayList<Node> getSuccessors(Node n) {
         ArrayList<Node> node_successors = new ArrayList<Node>();
 
@@ -47,5 +47,28 @@ public class Graph {
         }
 
         return node_successors;
+    }
+
+    // Returns the Edge object that links two Node objects
+    public Edge getEdge(Node nsource, Node ndestination) {
+        for (Edge e: edges) {
+            if(e.getSource() == nsource && e.getDestination() == ndestination)
+                return e;
+        }
+        return null;
+    }
+
+    // Returns the Edge object with the lowest ports where Node n is its source
+    public double getLowestPorts(Node n) {
+        double lowest_ports = Integer.MAX_VALUE;
+        for (Edge e: edges) {
+            if(e.getSource() == n && e.getPorts() < lowest_ports)
+                lowest_ports = e.getPorts();
+        }
+
+        if(lowest_ports == Integer.MAX_VALUE)
+            return 0;
+        else
+            return (lowest_ports / 0.5);
     }
 }
