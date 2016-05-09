@@ -1,12 +1,8 @@
 import java.util.ArrayList;
 
-/**
- * Created by Nuno Silva on 03/05/2016.
- */
 public class Graph {
-
-    private ArrayList<Node> nodes;
-    private ArrayList<Edge> edges;
+    private ArrayList<Node> nodes; // Node objects that constitute this Graph object
+    private ArrayList<Edge> edges; // Edge objects that are a part of this Graph object
 
     // Constructor method for class Graph
     public Graph(ArrayList<Node> nodes, ArrayList<Edge> edges) {
@@ -15,27 +11,15 @@ public class Graph {
     }
 
     // GET METHODS
-
     public ArrayList<Node> getNodes() { return this.nodes; }
-
-    public ArrayList<Edge> getEdges() {
-        return edges;
-    }
+    public ArrayList<Edge> getEdges() { return edges; }
+    public int getNumNodes() { return this.nodes.size(); }
 
     // SET METHODS
-
     public void setNodes(ArrayList<Node> nodes) { this.nodes = nodes; }
-
-    public void setEdges(ArrayList<Edge> edges) {
-        this.edges = edges;
-    }
+    public void setEdges(ArrayList<Edge> edges) { this.edges = edges; }
 
     // OTHER METHODS
-
-    // Get number of Node objects in array list nodes
-    public int getNumNodes() {
-        return this.nodes.size();
-    }
 
     // Returns an array list of Node objects where Node object is the source of the Edge objects
     public ArrayList<Node> getSuccessors(Node n) {

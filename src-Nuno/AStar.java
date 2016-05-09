@@ -2,20 +2,17 @@ import javax.xml.soap.*;
 import java.lang.reflect.Array;
 import java.util.*;
 
-/**
- * Created by Nuno Silva on 01/05/2016.
- */
-public class Test {
+public class AStar {
+    static double hours_sleep = 8; // Number of hours a person can drive a day
+    static double gas_tank = 50;  // Liters of gas a tank holds at any point during the trip
 
     public static LinkedHashMap<Node, Node> astar(final Graph g, Node nstart, final Node ngoal) {
         int numNodes = g.getNumNodes();
         nstart.setG(0);
         PriorityQueue<Node> open = new PriorityQueue<Node>(numNodes, new Comparator<Node>() {
             public int compare(Node n1, Node n2) {
-                double f1 = n1.getG() + (n1.getEuclideanDistance(ngoal) + g.getLowestPorts(n1));
-                n1.f = f1;
-                double f2 = n2.getG() + (n2.getEuclideanDistance(ngoal) + g.getLowestPorts(n2));
-                n2.f = f2;
+                double f1 = n1.heuristic(g, ngoal);
+                double f2 = n2.heuristic(g, ngoal);
 
                 if(f1 < f2)
                     return -1;
@@ -42,13 +39,19 @@ public class Test {
             for (Node n: ncurrent_successors) {
                 Edge e = g.getEdge(ncurrent, n);
                 double ports_cost = e.getPorts() / 0.5;
+                hours_sleep -= (e.getDistance() / 100);
+                gas_tank -= ((e.getDistance() * 8) / 100);
                 double new_g = current_g.get(ncurrent) + e.getDistance() + ports_cost;
-                if(! current_g.containsKey(n) || new_g < current_g.get(n))
+
+                if(! current_g.containsKey(n) || new_g < current_g.get(n) || n.getMandatory())
                 {
                     current_g.put(n, new_g);
                     n.setG(new_g);
                     open.add(n);
                     path.put(ncurrent, n);
+
+                    if(n.getMandatory())
+                        break;
                 }
             }
         }

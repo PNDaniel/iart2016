@@ -1,16 +1,12 @@
 import java.util.ArrayList;
 import java.math.*;
 
-/**
- * Created by Nuno Silva on 01/05/2016.
- */
 public class Node {
-
     private String id; // Identification of Node object
     private int pos_x; // X coordinate of Node object
     private int pos_y; // Y coordinate of Node object
     private double g; // G cost for Node object
-    public double f;
+    private boolean mandatory = false; // Boolean value that determines if visit to this Node object is mandatory
 
     // Constructor method for class Node
     public Node(String id, int pos_x, int pos_y) {
@@ -20,24 +16,18 @@ public class Node {
     }
 
     // GET METHODS
-
     public String getId() { return id; }
-
     public int getPos_x() { return this.pos_x; }
-
     public int getPos_y() { return this.pos_y; }
-
     public double getG() { return this.g; }
+    public boolean getMandatory() { return this.mandatory; }
+
     // SET METHODS
-
-
     public void setId(String id) { this.id = id; }
-
     public void setPos_x(int pos_x) { this.pos_x = pos_x; }
-
     public void setPos_y(int pos_y) { this.pos_y = pos_y; }
-
     public void setG(double g) { this.g = g; }
+    public void setMandatory(boolean mandatory) { this.mandatory = mandatory; }
 
     // OTHER METHODS
 
@@ -55,5 +45,12 @@ public class Node {
         double distance = Math.sqrt(Math.pow(n_distance_x, 2) + Math.pow(n_distance_y, 2));
 
         return distance;
+    }
+
+    // Calculates the heuristic for Node object given the Graph g its a part of and the Node object goal
+    public double heuristic(Graph g, Node ngoal) {
+        double heuristic = this.g + this.getEuclideanDistance(ngoal) + g.getLowestPorts(this);
+
+        return heuristic;
     }
 }
