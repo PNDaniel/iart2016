@@ -42,20 +42,6 @@ public class Graph {
         return null;
     }
 
-    // Returns the Edge object with the lowest ports where Node n is its source
-    public double getLowestPorts(Node n) {
-        double lowest_ports = Integer.MAX_VALUE;
-        for (Edge e: edges) {
-            if(e.getSource() == n && e.getPorts() < lowest_ports)
-                lowest_ports = e.getPorts();
-        }
-
-        if(lowest_ports == Integer.MAX_VALUE)
-            return 0;
-        else
-            return (lowest_ports / 0.5);
-    }
-
     // Returns the Node object with the lowest sleep costs in Graph objects with which Node n share an edge with
     public double getLowestSleepCost(Node n){
         double lowest_sleep_cost = Integer.MAX_VALUE;

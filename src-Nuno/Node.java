@@ -61,7 +61,7 @@ public class Node {
 
     // Returns the calculation of the heuristic for Node object given the Graph g its a part of and the Node object goal
     public double heuristic(Graph g, Node ngoal) {
-        double heuristic = this.g + this.getEuclideanDistance(ngoal) + g.getLowestPorts(this);
+        double heuristic = this.g + this.getEuclideanDistance(ngoal);
 
         return heuristic;
     }
