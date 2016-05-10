@@ -55,4 +55,33 @@ public class Graph {
         else
             return (lowest_ports / 0.5);
     }
+
+    // Returns the Node object with the lowest sleep costs in Graph objects with which Node n share an edge with
+    public double getLowestSleepCost(Node n){
+        double lowest_sleep_cost = Integer.MAX_VALUE;
+        ArrayList<Node> node_successors = getSuccessors(n);
+
+        for (Node n1: node_successors) {
+            double sleep_costs = n1.getSleep_cost();
+
+            if(sleep_costs < lowest_sleep_cost && sleep_costs != -1)
+                lowest_sleep_cost = sleep_costs;
+        }
+
+        if(lowest_sleep_cost == Integer.MAX_VALUE)
+            return 0;
+        else
+            return lowest_sleep_cost;
+    }
+
+    // Returns the Node objects where the Edge objects between Node objects have a gas station
+    public ArrayList<Node> gasStationSuccessors(Node n) {
+        ArrayList<Node> viable_successors = new ArrayList<Node>();
+
+        for (Edge e: edges) {
+            if(n == e.getSource() && e.getGas_station())
+                viable_successors.add(e.getDestination());
+        }
+        return viable_successors;
+    }
 }

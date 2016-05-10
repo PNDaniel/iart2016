@@ -3,10 +3,25 @@ import java.lang.reflect.Array;
 import java.util.*;
 
 public class AStar {
-    static double hours_sleep = 8; // Number of hours a person can drive a day
-    static double gas_tank = 50;  // Liters of gas a tank holds at any point during the trip
 
-    public static LinkedHashMap<Node, Node> astar(final Graph g, Node nstart, final Node ngoal) {
+    // Returns the best path given by A* algorithm
+    public static List<Node> getPath(Node nstart, Node ngoal) {
+        Node n_temp = ngoal;
+        List<Node> path = new ArrayList<Node>();
+        int count = 0;
+
+        path.add(ngoal);
+        while(n_temp.getId() != nstart.getId()) {
+            n_temp = path.get(count).getParent();
+            path.add(n_temp);
+            count++;
+        }
+        Collections.reverse(path);
+        return path;
+    }
+
+    // A* Algorithm - Returns a list of Node objects after the best path has been determined by the A* algorithm
+    public static List<Node> astar(final Graph g, Node nstart, final Node ngoal) {
         int numNodes = g.getNumNodes();
         nstart.setG(0);
         PriorityQueue<Node> open = new PriorityQueue<Node>(numNodes, new Comparator<Node>() {
@@ -22,11 +37,10 @@ public class AStar {
                 return 0;
             }
         });
-        LinkedHashMap<Node, Node> path = new LinkedHashMap<Node, Node>();
         LinkedHashMap<Node, Double> current_g = new LinkedHashMap<Node, Double>();
 
         open.add(nstart);
-        path.put(nstart, nstart);
+        nstart.setParent(nstart);
         current_g.put(nstart, 0.0);
 
         while(! (open.isEmpty())) {
@@ -35,27 +49,57 @@ public class AStar {
             if(ncurrent == ngoal)
                 break;
 
+            if(ncurrent.getParent().getDriving_hours() <= 3 && ncurrent.getSleep_cost() != -1)
+            {
+                System.out.println("Rest in " + ncurrent.getId() + " for 8 hours.");
+                ncurrent.setDriving_hours(8);
+            }
+
+            Edge ep = g.getEdge(ncurrent.getParent(), ncurrent);
+
+            if(ncurrent.getParent().getGas_litres() <= 20 && ep.getGas_station())
+            {
+                System.out.println("Filled up gas in " + ep.getId() + " for 60 litres.");
+                ncurrent.setGas_litres(60);
+            }
+
+
             ArrayList<Node> ncurrent_successors = g.getSuccessors(ncurrent);
             for (Node n: ncurrent_successors) {
+                double new_g;
                 Edge e = g.getEdge(ncurrent, n);
                 double ports_cost = e.getPorts() / 0.5;
-                hours_sleep -= (e.getDistance() / 100);
-                gas_tank -= ((e.getDistance() * 8) / 100);
-                double new_g = current_g.get(ncurrent) + e.getDistance() + ports_cost;
+                double sleep_cost = n.getSleep_cost() / 10;
+                double driving_hours = ncurrent.getDriving_hours();
+                double gas_litres = ncurrent.getGas_litres();
 
-                if(! current_g.containsKey(n) || new_g < current_g.get(n) || n.getMandatory())
+                if(driving_hours <= 3 && sleep_cost == -0.1)
+                    new_g = 50 + current_g.get(ncurrent) + e.getDistance() + ports_cost;
+                else
+                    new_g = current_g.get(ncurrent) + e.getDistance() + ports_cost + sleep_cost;
+
+                if(gas_litres <= 20) {
+                    if(e.getGas_station())
+                        new_g = current_g.get(ncurrent) + e.getDistance() + ports_cost;
+                    else
+                        new_g = 50 + current_g.get(ncurrent) + e.getDistance() + ports_cost;
+                }
+
+                if(n.getMandatory())
+                    new_g = 0;
+
+                if(! current_g.containsKey(n) || new_g < current_g.get(n))
                 {
+                    n.setDriving_hours(driving_hours - (e.getDistance() / 100));
+                    n.setGas_litres(((e.getDistance() * 8) / 100));
                     current_g.put(n, new_g);
                     n.setG(new_g);
                     open.add(n);
-                    path.put(ncurrent, n);
-
-                    if(n.getMandatory())
-                        break;
+                    n.setParent(ncurrent);
                 }
             }
         }
-        return path;
+        return getPath(nstart, ngoal);
     }
 
     public static void main(String args[]) {
@@ -67,17 +111,17 @@ public class AStar {
         Node n5 = new Node("n5", 8, 18);
         Node n6 = new Node("n6", 10, 20);
 
-        Edge e1 = new Edge(n1, n2, n1.getEuclideanDistance(n2), 2.00);
-        Edge e2 = new Edge(n1, n3, n1.getEuclideanDistance(n3), 2.00);
-        Edge e3 = new Edge(n2, n4, n2.getEuclideanDistance(n4), 4.50);
-        Edge e4 = new Edge(n4, n6, n4.getEuclideanDistance(n6), 0.50);
-        Edge e5 = new Edge(n3, n5, n3.getEuclideanDistance(n5), 1.25);
-        Edge e6 = new Edge(n5, n6, n5.getEuclideanDistance(n6), 3.00);
+        Edge e1 = new Edge("A1", n1, n2, n1.getEuclideanDistance(n2), 2.00);
+        Edge e2 = new Edge("A2", n1, n3, n1.getEuclideanDistance(n3), 2.00);
+        Edge e3 = new Edge("A3", n2, n4, n2.getEuclideanDistance(n4), 4.50);
+        Edge e4 = new Edge("A4", n4, n6, n4.getEuclideanDistance(n6), 0.50);
+        Edge e5 = new Edge("A5", n3, n5, n3.getEuclideanDistance(n5), 1.25);
+        Edge e6 = new Edge("A6", n5, n6, n5.getEuclideanDistance(n6), 3.00);
 
         ArrayList<Node> nodes = new ArrayList<Node>();
         nodes.add(n1);
-        nodes.add(n2);
         nodes.add(n3);
+        nodes.add(n2);
         nodes.add(n4);
         nodes.add(n5);
         nodes.add(n6);
@@ -92,12 +136,10 @@ public class AStar {
 
         Graph g1 = new Graph(nodes, edges);
 
-        LinkedHashMap<Node, Node> path = astar(g1, n1, n6);
+        List<Node> path = astar(g1, n1, n6);
 
-        Set<Node> keys = path.keySet();
-        for(Node n: keys)
-        {
-            System.out.println(n.getId() + " -->" + path.get(n).getId());
+        for (Node n: path) {
+            System.out.println(n.getId());
         }
     }
 }
