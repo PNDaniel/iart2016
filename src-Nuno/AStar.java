@@ -1,6 +1,5 @@
-import javax.xml.soap.*;
-import java.lang.reflect.Array;
 import java.util.*;
+import java.util.List;
 
 public class AStar {
 
@@ -133,6 +132,8 @@ public class AStar {
         edges.add(e4);
         edges.add(e5);
         edges.add(e6);
+
+        WeightedGraph wg = new WeightedGraph(nodes, edges);
 
         Graph g1 = new Graph(nodes, edges);
 
