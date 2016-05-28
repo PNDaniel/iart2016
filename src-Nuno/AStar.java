@@ -103,12 +103,12 @@ public class AStar {
 
     public static void main(String args[]) {
 
-        Node n1 = new Node("n1", 0, 0);
-        Node n2 = new Node("n2", 0, 10);
-        Node n3 = new Node("n3", 5, 15);
-        Node n4 = new Node("n4", 0, 20);
-        Node n5 = new Node("n5", 8, 18);
-        Node n6 = new Node("n6", 10, 20);
+        Node n1 = new Node("n1", 50, 0);
+        Node n2 = new Node("n2", 280, 30);
+        Node n3 = new Node("n3", 5, 260);
+        Node n4 = new Node("n4", 400, 300);
+        Node n5 = new Node("n5", 80, 100);
+        Node n6 = new Node("n6", 240, 200);
 
         Edge e1 = new Edge("A1", n1, n2, n1.getEuclideanDistance(n2), 2.00);
         Edge e2 = new Edge("A2", n1, n3, n1.getEuclideanDistance(n3), 2.00);
@@ -133,7 +133,9 @@ public class AStar {
         edges.add(e5);
         edges.add(e6);
 
-        WeightedGraph wg = new WeightedGraph(nodes, edges);
+        GraphRepresentation gr = new GraphRepresentation(nodes, edges);
+
+        //gr.start();
 
         Graph g1 = new Graph(nodes, edges);
 
