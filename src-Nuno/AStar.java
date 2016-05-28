@@ -67,12 +67,12 @@ public class AStar {
             for (Node n: ncurrent_successors) {
                 double new_g;
                 Edge e = g.getEdge(ncurrent, n);
-                double ports_cost = e.getPorts() / 0.5;
-                double sleep_cost = n.getSleep_cost() / 10;
+                double ports_cost = e.getPorts() / 0.1;
+                double sleep_cost = n.getSleep_cost() / 5;
                 double driving_hours = ncurrent.getDriving_hours();
                 double gas_litres = ncurrent.getGas_litres();
 
-                if(driving_hours <= 3 && sleep_cost == -0.1)
+                if(driving_hours <= 3 && sleep_cost == -0.2)
                     new_g = 50 + current_g.get(ncurrent) + e.getDistance() + ports_cost;
                 else
                     new_g = current_g.get(ncurrent) + e.getDistance() + ports_cost + sleep_cost;
