@@ -1,9 +1,14 @@
 import javax.swing.JFrame;
+import javax.swing.text.html.ObjectView;
 
+import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxICell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.view.mxGraph;
+import jdk.nashorn.internal.ir.LiteralNode;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -43,14 +48,31 @@ public class GraphRepresentation extends JFrame {
         graph.setCellsBendable(false);
 
         graph.getModel().beginUpdate();
+
         try {
             //System.out.println("Here");
+            ArrayList<mxCell> cell = new ArrayList<mxCell>();
             for (int i = 0; i < nodes.size(); i++) {
-                graph.insertVertex(parent, null, nodes.get(i).getId(), nodes.get(i).getPos_x(), nodes.get(i).getPos_y(), 80, 30);
+                mxCell cell1 = new mxCell();
+                cell1.setValue(graph.insertVertex(parent, null, nodes.get(i).getId(), nodes.get(i).getPos_x(), nodes.get(i).getPos_y(), 80, 30));
+                cell.add(cell1);
             }
+
             for (int i = 0; i < edges.size(); i++) {
-                graph.insertEdge(parent, null, edges.get(i).getDistance(), edges.get(i).getSource(), edges.get(i).getDestination());
+                System.out.println("Source " + edges.get(i).getSource());
+                System.out.println("Destination " + edges.get(i).getDestination());
+
+                mxCell cell1 = new mxCell();
+                mxCell cell2 = new mxCell();
+                cell1.setValue(edges.get(i).getSource());
+                cell2.setValue(edges.get(i).getDestination());
+
+                //graph.insertEdge(parent, null, edges.get(i).getDistance(), cell1.getValue(), cell2.getValue());
+
+
+                graph.insertEdge(parent, null, edges.get(i).getDistance(), cell.get(i).getValue(), cell.get(i).getValue());
             }
+
             /*Object v1 = graph.insertVertex(parent, null, "Porto", 20, 20, 80, 30);
             Object v2 = graph.insertVertex(parent, null, "Braga", 240, 150, 80, 30);
             Object v3 = graph.insertVertex(parent, null, "Lisboa",  80, 200, 80, 30);
