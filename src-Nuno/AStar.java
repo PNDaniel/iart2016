@@ -134,8 +134,7 @@ public class AStar {
         edges.add(e6);
 
         GraphRepresentation gr = new GraphRepresentation(nodes, edges);
-
-        //gr.start();
+        //WeightedGraph gcea = new WeightedGraph(nodes, edges);
 
         Graph g1 = new Graph(nodes, edges);
 

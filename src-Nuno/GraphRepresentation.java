@@ -1,3 +1,4 @@
+import javax.management.MXBean;
 import javax.swing.JFrame;
 import javax.swing.text.html.ObjectView;
 
@@ -52,25 +53,43 @@ public class GraphRepresentation extends JFrame {
         try {
             //System.out.println("Here");
             ArrayList<mxCell> cell = new ArrayList<mxCell>();
+            Object[] obj = new Object[]{};
             for (int i = 0; i < nodes.size(); i++) {
-                mxCell cell1 = new mxCell();
-                cell1.setValue(graph.insertVertex(parent, null, nodes.get(i).getId(), nodes.get(i).getPos_x(), nodes.get(i).getPos_y(), 80, 30));
-                cell.add(cell1);
-            }
+                Object v = graph.insertVertex(parent, null, nodes.get(i).getId(), nodes.get(i).getPos_x(), nodes.get(i).getPos_y(), 80, 30);
+                obj = appendValue(obj, v);
 
+            /*    mxCell cell1 = new mxCell();
+                //cell1.setValue(graph.insertVertex(parent, null, nodes.get(i).getId(), nodes.get(i).getPos_x(), nodes.get(i).getPos_y(), 80, 30));
+                //cell.add(cell1);
+                Object cenas = graph.insertVertex(parent, null, nodes.get(i).getId(), nodes.get(i).getPos_x(), nodes.get(i).getPos_y(), 80, 30);
+
+                cell1.setValue(cenas);
+                System.out.println("King " + cell1.getValue());
+                cell.add(cell1);*/
+            }
             for (int i = 0; i < edges.size(); i++) {
+
+                Object v1 = edges.get(i).getSource();
+                Object v2 = edges.get(i).getDestination();
+                Object v3 = edges.get(i).getDistance();
+
+                //graph.insertEdge(parent, null, "3.0",new mxCell(v1),new mxCell(v2));
+
+                graph.insertEdge(parent, null, edges.get(i).getDistance(), obj[i], obj[1]);
+
+/*                graph.insertEdge(parent, null, edges.get(i).getDistance(), new mxCell(edges.get(i).getSource()).getParent(), new mxCell(edges.get(i).getDestination()).getChildAt(0));
+
                 System.out.println("Source " + edges.get(i).getSource());
                 System.out.println("Destination " + edges.get(i).getDestination());
 
                 mxCell cell1 = new mxCell();
                 mxCell cell2 = new mxCell();
                 cell1.setValue(edges.get(i).getSource());
-                cell2.setValue(edges.get(i).getDestination());
+                cell2.setValue(edges.get(i).getDestination());*/
 
                 //graph.insertEdge(parent, null, edges.get(i).getDistance(), cell1.getValue(), cell2.getValue());
 
-
-                graph.insertEdge(parent, null, edges.get(i).getDistance(), cell.get(i).getValue(), cell.get(i).getValue());
+                //graph.insertEdge(parent, null, edges.get(i).getDistance(), cell.get(i).getValue(), cell.get(i).getValue());
             }
 
             /*Object v1 = graph.insertVertex(parent, null, "Porto", 20, 20, 80, 30);
