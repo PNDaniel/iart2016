@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.math.*;
 
 public class Node {
+
+    private int numID;
     private String id; // Identification of Node object
     private int pos_x; // X coordinate of Node object
     private int pos_y; // Y coordinate of Node object
@@ -13,13 +15,17 @@ public class Node {
     private double gas_litres = 60; // Number of gas litres available for driving
 
     // Constructor method for class Node
-    public Node(String id, int pos_x, int pos_y) {
+    public Node(int numID, String id, int pos_x, int pos_y) {
+        this.numID = numID;
         this.id = id;
         this.pos_x = pos_x;
         this.pos_y = pos_y;
     }
 
     // GET METHODS
+    public int getNumID() {
+        return numID;
+    }
     public String getId() { return id; }
     public int getPos_x() { return this.pos_x; }
     public int getPos_y() { return this.pos_y; }
@@ -31,6 +37,9 @@ public class Node {
     public double getGas_litres() { return this.gas_litres; }
 
     // SET METHODS
+    public void setNumID(int numID) {
+        this.numID = numID;
+    }
     public void setId(String id) { this.id = id; }
     public void setPos_x(int pos_x) { this.pos_x = pos_x; }
     public void setPos_y(int pos_y) { this.pos_y = pos_y; }

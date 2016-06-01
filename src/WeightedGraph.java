@@ -1,18 +1,29 @@
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.layout.mxIGraphLayout;
 import com.mxgraph.swing.mxGraphComponent;
+import org.jgraph.JGraph;
+import org.jgrapht.Graphs;
 import org.jgrapht.ListenableGraph;
+import org.jgrapht.ext.JGraphModelAdapter;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.ListenableDirectedGraph;
 import org.jgrapht.graph.ListenableDirectedWeightedGraph;
+import org.jgrapht.util.VertexPair;
+import sun.security.provider.certpath.Vertex;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class WeightedGraph {
 
     ArrayList<Node> nodes = new ArrayList<Node>();
     ArrayList<Edge> edges = new ArrayList<Edge>();
+
+
+    private static final Color DEFAULT_BG_COLOR = Color.decode("#FAFBFF");
+    private static final Dimension DEFAULT_SIZE = new Dimension(800, 600);
 
     private void createAndShowGui() {
         JFrame frame = new JFrame();
@@ -25,6 +36,7 @@ public class WeightedGraph {
 
         mxIGraphLayout layout = new mxCircleLayout(graphAdapter);
         layout.execute(graphAdapter.getDefaultParent());
+
 
         frame.add(new mxGraphComponent(graphAdapter));
         frame.setLocationByPlatform(true);
@@ -51,20 +63,16 @@ public class WeightedGraph {
 
     public static class MyEdge extends DefaultWeightedEdge {
         @Override
+
         public String toString() {
             return String.valueOf(getWeight());
         }
+
+        public String colour;
     }
 
     public ListenableGraph<String, MyEdge> buildGraph() {
         ListenableDirectedWeightedGraph<String, MyEdge> g = new ListenableDirectedWeightedGraph<String, MyEdge>(MyEdge.class);
-
-       /* String v1 = "Porto";
-        String v2 = "Braga";
-        String v3 = "Lisboa";
-        String v4 = "Faro";
-        String v5 = "Rio Tinto";
-        String v6 = "Gaia";*/
 
         // Add nodes to graph
         for (int i = 0; i < nodes.size(); i++) {
@@ -72,6 +80,7 @@ public class WeightedGraph {
         }
 
         for (int i = 0; i < edges.size(); i++) {
+
             MyEdge e = g.addEdge(edges.get(i).getSource().getId(), edges.get(i).getDestination().getId());
             g.setEdgeWeight(e, edges.get(i).getDistance());
         }

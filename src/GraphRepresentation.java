@@ -18,9 +18,10 @@ import java.util.Arrays;
  * https://jgraph.github.io/mxgraph/docs/manual_javavis.html
  * Customize Graph:
  * http://stackoverflow.com/questions/4051765/customizing-jgraphx
- * http://www.vainolo.com/wp-content/uploads/2011/05/Capture.png
  * https://www.vainolo.com/2011/04/11/another-day-with-jgraph-styles-and-constrained-children/
+ * http://www.vainolo.com/wp-content/uploads/2011/05/Capture.png
  */
+
 public class GraphRepresentation extends JFrame {
     ArrayList<Node> nodes = new ArrayList<Node>();
     ArrayList<Edge> edges = new ArrayList<Edge>();
@@ -54,9 +55,14 @@ public class GraphRepresentation extends JFrame {
             //System.out.println("Here");
             ArrayList<mxCell> cell = new ArrayList<mxCell>();
             Object[] obj = new Object[]{};
+            // pode-se tentar resolver com setValue, metendo um valor no objecto e igualando o valor do objecto as edges?
+            // criar o graph.insertVertex directamente num mxCell
             for (int i = 0; i < nodes.size(); i++) {
                 Object v = graph.insertVertex(parent, null, nodes.get(i).getId(), nodes.get(i).getPos_x(), nodes.get(i).getPos_y(), 80, 30);
+                graph.insertVertex(parent, null, nodes.get(i).getId(), nodes.get(i).getPos_x(), nodes.get(i).getPos_y(), 80, 30);
                 obj = appendValue(obj, v);
+
+
 
             /*    mxCell cell1 = new mxCell();
                 //cell1.setValue(graph.insertVertex(parent, null, nodes.get(i).getId(), nodes.get(i).getPos_x(), nodes.get(i).getPos_y(), 80, 30));
