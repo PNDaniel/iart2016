@@ -130,6 +130,13 @@ public class SimpleGraphView {
             frame = new JFrame("Simple Graph View - Start");
             frame.setLocation(wdwLeft - 900, wdwTop);
         }
+
+      /*  ZoomAndPanCanvas chart = new ZoomAndPanCanvas();
+        frame.add(chart, BorderLayout.CENTER);
+        frame.setSize(800,600);
+        frame.setVisible(true);
+        chart.createBufferStrategy(2);*/
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(vv);
         frame.pack();
