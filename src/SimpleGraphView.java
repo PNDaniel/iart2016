@@ -1,16 +1,23 @@
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.samples.InternalFrameSatelliteViewDemo;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.renderers.*;
 import org.apache.commons.collections15.Transformer;
 
 import javax.swing.*;
+import javax.swing.Renderer;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 // http://stackoverflow.com/questions/8458970/change-size-color-of-vertex-in-jung
 
@@ -18,13 +25,19 @@ public class SimpleGraphView {
 
     public SimpleGraphView(ArrayList<Node> nodes, ArrayList<Edge> edges, boolean check) {
         // Create a graph with Integer vertices and String edges
-        Graph<Integer, String> g = new SparseGraph<Integer, String>();
+        //Graph<Integer, String> g = new SparseGraph<Integer, String>();
+        DirectedSparseMultigraph<Integer, String> g = new DirectedSparseMultigraph<Integer, String>();
 
         for (int i = 0; i < nodes.size(); i++)
             g.addVertex(nodes.get(i).getNumID());
-        //for(int i = 0; i < 5; i++) g.addVertex(i);
         for (int i = 0; i < edges.size(); i++) {
-            g.addEdge(edges.get(i).getId(), edges.get(i).getSource().getNumID(), edges.get(i).getDestination().getNumID());
+            for (int j : g.getVertices()) {
+                if (edges.get(i).getSource().getNumID() == j)
+                    for (int h : g.getVertices()) {
+                        if (edges.get(i).getDestination().getNumID() == h)
+                            g.addEdge(edges.get(i).getId(), j, h);
+                    }
+            }
         }
 
         // Layout implements the graph drawing logic
@@ -38,7 +51,9 @@ public class SimpleGraphView {
         // Transformer maps the vertex number to a vertex property
         Transformer<Integer, Paint> vertexColor = new Transformer<Integer, Paint>() {
             public Paint transform(Integer i) {
-                if (i == 1) return Color.GREEN;
+                if (check == true)
+                    if (nodes.get(i).getSolution() == true)
+                        return Color.GREEN;
                 return Color.BLACK;
             }
         };
@@ -54,18 +69,53 @@ public class SimpleGraphView {
         Transformer<String, Paint> edgePaint = new Transformer<String, Paint>() {
             @Override
             public Paint transform(String s) {    // s represents the edge
-               /* if (...){    // your condition
-                    return Color.RED;
-                }
-                else {
-                    return Color.DARK_GRAY;
-                }*/
+                if (check == true)
+                    for (int i = 0; i < edges.size(); i++) {
+                        if (s == edges.get(i).getId())
+                            if (edges.get(i).getSolution())
+                                return Color.GREEN;
+                    }
                 return Color.BLACK;
             }
         };
+        Transformer<Integer, String> vertexName = new Transformer<Integer, String>() {
+            @Override
+            public String transform(Integer i) {
+                return nodes.get(i).getId();
+            }
+        };
+
+        Transformer<String, String> edgeLabel = new Transformer<String, String>() {
+            @Override
+            public String transform(String s) {
+                if (check == true)
+                    for (int i = 0; i < edges.size(); i++) {
+                        if (s == edges.get(i).getId())
+                            if (edges.get(i).getSolution())
+                                return s;
+                    }
+                return s;
+            }
+        };
+        Transformer<String, Paint> edgeLabel1 = new Transformer<String, Paint>() {
+            @Override
+            public Paint transform(String s) {
+                if (check == true)
+                    for (int i = 0; i < edges.size(); i++) {
+                        if (s == edges.get(i).getId())
+                            if (edges.get(i).getSolution())
+                                return Color.GREEN;
+                    }
+                return Color.BLACK;
+            }
+        };
+        vv.getRenderContext().setVertexLabelTransformer(vertexName);
         vv.getRenderContext().setVertexFillPaintTransformer(vertexColor);
         //vv.getRenderContext().setVertexShapeTransformer(vertexSize);
-        //vv.getRenderContext().setEdgeDrawPaintTransformer(edgePaint);
+        vv.getRenderContext().setEdgeDrawPaintTransformer(edgePaint);
+        vv.getRenderContext().setEdgeLabelTransformer(edgeLabel);
+
+        vv.getRenderContext().setLabelOffset(15);
 
         JFrame frame;
         Dimension screenSize = new Dimension(Toolkit.getDefaultToolkit().getScreenSize());

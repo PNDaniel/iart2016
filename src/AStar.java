@@ -4,13 +4,17 @@ import java.util.List;
 public class AStar {
 
     // Returns the best path given by A* algorithm
-    public static List<Node> getPath(Node nstart, Node ngoal) {
+    public static ArrayList<Node> getPath(Node nstart, Node ngoal, Graph g) {
+        ngoal.setSolution(true);
+        Edge e_temp = null;
         Node n_temp = ngoal;
-        List<Node> path = new ArrayList<Node>();
+        ArrayList<Node> path = new ArrayList<Node>();
         int count = 0;
 
         path.add(ngoal);
         while(n_temp.getId() != nstart.getId()) {
+            e_temp = g.getEdge(path.get(count).getParent(), n_temp);
+            e_temp.setSolution(true);
             n_temp = path.get(count).getParent();
             path.add(n_temp);
             n_temp.setSolution(true);
@@ -21,7 +25,7 @@ public class AStar {
     }
 
     // A* Algorithm - Returns a list of Node objects after the best path has been determined by the A* algorithm
-    public static List<Node> astar(final Graph g, Node nstart, final Node ngoal) {
+    public static ArrayList<Node> astar(final Graph g, Node nstart, final Node ngoal) {
         int numNodes = g.getNumNodes();
         nstart.setG(0);
         PriorityQueue<Node> open = new PriorityQueue<Node>(numNodes, new Comparator<Node>() {
@@ -99,7 +103,7 @@ public class AStar {
                 }
             }
         }
-        return getPath(nstart, ngoal);
+        return getPath(nstart, ngoal, g);
     }
 
     public static void main(String args[]) {
@@ -117,11 +121,13 @@ public class AStar {
         Edge e4 = new Edge("A4", n4, n6, n4.getEuclideanDistance(n6), 0.50);
         Edge e5 = new Edge("A5", n3, n5, n3.getEuclideanDistance(n5), 1.25);
         Edge e6 = new Edge("A6", n5, n6, n5.getEuclideanDistance(n6), 3.00);
+        Edge e7 = new Edge("A7", n5, n6, n5.getEuclideanDistance(n6), 4.00);
+        Edge e8 = new Edge("A8", n5, n6, n5.getEuclideanDistance(n6), 1.00);
 
         ArrayList<Node> nodes = new ArrayList<Node>();
         nodes.add(n1);
-        nodes.add(n3);
         nodes.add(n2);
+        nodes.add(n3);
         nodes.add(n4);
         nodes.add(n5);
         nodes.add(n6);
@@ -133,17 +139,14 @@ public class AStar {
         edges.add(e4);
         edges.add(e5);
         edges.add(e6);
+        edges.add(e7);
+        edges.add(e8);
 
         SimpleGraphView sgv = new SimpleGraphView(nodes, edges, false);
-        //GraphRepresentation gr = new GraphRepresentation(nodes, edges);
 
         Graph g1 = new Graph(nodes, edges);
+        ArrayList<Node> path = astar(g1, n1, n6);
 
-        List<Node> path = astar(g1, n1, n6);
-        n1.setSolution(true);
-        n3.setSolution(true);
-        n5.setSolution(true);
-        n6.setSolution(true);
         sgv = new SimpleGraphView(nodes, edges, true);
         for (Node n: path) {
             System.out.println(n.getId());

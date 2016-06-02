@@ -24,9 +24,6 @@ public class Node {
     }
 
     // GET METHODS
-    public boolean getSolution() {
-        return this.solution;
-    }
     public int getNumID() {
         return numID;
     }
@@ -42,9 +39,6 @@ public class Node {
     public boolean getSolution() {return this.solution; }
 
     // SET METHODS
-    public void setSolution(boolean solution) {
-        this.solution = solution;
-    }
     public void setNumID(int numID) {
         this.numID = numID;
     }
