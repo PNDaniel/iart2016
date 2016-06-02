@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 
 public class Edge {
+
+    private boolean solution;
     private String id; // Identification of Edge object
     private Node source; // Source Node object
     private Node destination; // Destination Node object
@@ -18,6 +20,9 @@ public class Edge {
     }
 
     // GET METHODS
+    public boolean getSolution() {
+        return this.solution;
+    }
     public String getId() { return this.id; }
     public Node getSource() { return this.source; }
     public Node getDestination() { return this.destination; }
@@ -26,6 +31,9 @@ public class Edge {
     public boolean getGas_station() { return this.gas_station; }
 
     // SET METHODS
+    public void setSolution(boolean solution) {
+        this.solution = solution;
+    }
     public void setId(String id) { this.id = id; }
     public void setSource(Node source) { this.source = source; }
     public void setDestination(Node destination) { this.destination = destination; }

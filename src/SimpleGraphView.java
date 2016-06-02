@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class SimpleGraphView {
 
-    public SimpleGraphView(ArrayList<Node> nodes, ArrayList<Edge> edges) {
+    public SimpleGraphView(ArrayList<Node> nodes, ArrayList<Edge> edges, boolean check) {
         // Create a graph with Integer vertices and String edges
         Graph<Integer, String> g = new SparseGraph<Integer, String>();
 
@@ -26,22 +26,20 @@ public class SimpleGraphView {
         for (int i = 0; i < edges.size(); i++) {
             g.addEdge(edges.get(i).getId(), edges.get(i).getSource().getNumID(), edges.get(i).getDestination().getNumID());
         }
-        /*g.addEdge("Edge", 1, 2);
-        g.addEdge("Another Edge", 1, 4);*/
 
         // Layout implements the graph drawing logic
         Layout<Integer, String> layout = new CircleLayout<Integer, String>(g);
-        layout.setSize(new Dimension(300, 300));
+        layout.setSize(new Dimension(800, 600));
 
         // VisualizationServer actually displays the graph
         BasicVisualizationServer<Integer, String> vv = new BasicVisualizationServer<Integer, String>(layout);
-        vv.setPreferredSize(new Dimension(350, 350)); //Sets the viewing area size
+        vv.setPreferredSize(new Dimension(800, 600)); //Sets the viewing area size
 
         // Transformer maps the vertex number to a vertex property
         Transformer<Integer, Paint> vertexColor = new Transformer<Integer, Paint>() {
             public Paint transform(Integer i) {
                 if (i == 1) return Color.GREEN;
-                return Color.RED;
+                return Color.BLACK;
             }
         };
         Transformer<Integer, Shape> vertexSize = new Transformer<Integer, Shape>() {
@@ -62,14 +60,26 @@ public class SimpleGraphView {
                 else {
                     return Color.DARK_GRAY;
                 }*/
-                return Color.RED;
+                return Color.BLACK;
             }
         };
-        //vv.getRenderContext().setVertexFillPaintTransformer(vertexColor);
+        vv.getRenderContext().setVertexFillPaintTransformer(vertexColor);
         //vv.getRenderContext().setVertexShapeTransformer(vertexSize);
         //vv.getRenderContext().setEdgeDrawPaintTransformer(edgePaint);
 
-        JFrame frame = new JFrame("Simple Graph View");
+        JFrame frame;
+        Dimension screenSize = new Dimension(Toolkit.getDefaultToolkit().getScreenSize());
+        Dimension windowSize = new Dimension(new Dimension(800, 600));
+        int wdwLeft = 400 + screenSize.width / 2 - windowSize.width / 2;
+        int wdwTop = screenSize.height / 2 - windowSize.height / 2;
+
+        if (check == true) {
+            frame = new JFrame("Simple Graph View - Solution");
+            frame.setLocation(wdwLeft, wdwTop);
+        } else {
+            frame = new JFrame("Simple Graph View - Start");
+            frame.setLocation(wdwLeft - 900, wdwTop);
+        }
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(vv);
         frame.pack();

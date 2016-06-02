@@ -3,6 +3,7 @@ import java.math.*;
 
 public class Node {
 
+    private boolean solution;
     private int numID;
     private String id; // Identification of Node object
     private int pos_x; // X coordinate of Node object
@@ -23,6 +24,9 @@ public class Node {
     }
 
     // GET METHODS
+    public boolean getSolution() {
+        return this.solution;
+    }
     public int getNumID() {
         return numID;
     }
@@ -37,6 +41,9 @@ public class Node {
     public double getGas_litres() { return this.gas_litres; }
 
     // SET METHODS
+    public void setSolution(boolean solution) {
+        this.solution = solution;
+    }
     public void setNumID(int numID) {
         this.numID = numID;
     }

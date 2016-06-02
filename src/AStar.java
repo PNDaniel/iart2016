@@ -133,13 +133,17 @@ public class AStar {
         edges.add(e5);
         edges.add(e6);
 
-        SimpleGraphView sgv = new SimpleGraphView(nodes, edges);
+        SimpleGraphView sgv = new SimpleGraphView(nodes, edges, false);
         //GraphRepresentation gr = new GraphRepresentation(nodes, edges);
 
         Graph g1 = new Graph(nodes, edges);
 
         List<Node> path = astar(g1, n1, n6);
-
+        n1.setSolution(true);
+        n3.setSolution(true);
+        n5.setSolution(true);
+        n6.setSolution(true);
+        sgv = new SimpleGraphView(nodes, edges, true);
         for (Node n: path) {
             System.out.println(n.getId());
         }
