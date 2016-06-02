@@ -13,6 +13,7 @@ public class AStar {
         while(n_temp.getId() != nstart.getId()) {
             n_temp = path.get(count).getParent();
             path.add(n_temp);
+            n_temp.setSolution(true);
             count++;
         }
         Collections.reverse(path);

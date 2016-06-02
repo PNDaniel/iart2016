@@ -3,7 +3,7 @@ import java.math.*;
 
 public class Node {
 
-    private boolean solution;
+    private boolean solution = false;
     private int numID;
     private String id; // Identification of Node object
     private int pos_x; // X coordinate of Node object
@@ -39,6 +39,7 @@ public class Node {
     public Node getParent() { return this.parent; }
     public double getDriving_hours() { return this.driving_hours; }
     public double getGas_litres() { return this.gas_litres; }
+    public boolean getSolution() {return this.solution; }
 
     // SET METHODS
     public void setSolution(boolean solution) {
@@ -56,6 +57,7 @@ public class Node {
     public void setParent(Node parent) { this.parent = parent; }
     public void setDriving_hours(double driving_hours) { this.driving_hours = driving_hours; }
     public void setGas_litres(double gas_litres) { this.gas_litres = gas_litres; }
+    public void setSolution(boolean solution) { this.solution = solution; }
 
     // OTHER METHODS
 
